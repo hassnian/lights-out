@@ -4,9 +4,9 @@ import './Board.css';
 
 class Board extends Component {
   static defaultProps={
-    nRows:6,
-    nCols:6,
-    chanceLightStartsOn:0
+    nRows:5,
+    nCols:5,
+    chanceLightStartsOn:0.25
   };
   constructor(props) {
     super(props);
@@ -21,7 +21,6 @@ class Board extends Component {
 
   createBoard() {
     let board = [];
-    // TODO: create array-of-arrays of true/false values
     for(let y=0;y<this.props.nRows;y++){
       let row=[];
       for (let x=0;x<this.props.nCols;x++){
