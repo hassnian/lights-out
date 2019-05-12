@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/lights-out/static/css/main.57fbb0a4.chunk.css"
   },
   {
-    "revision": "201124c27b9b6804f111e739d5f66438",
+    "revision": "8adaaabb922ed83d3e868fd33050d6d6",
     "url": "/lights-out/index.html"
   }
 ];
