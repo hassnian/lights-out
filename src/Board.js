@@ -12,7 +12,8 @@ class Board extends Component {
     super(props);
     this.state={
       hasWon:false,
-      board:this.createBoard()
+      board:this.createBoard(),
+      flips:0
     }
   }
 
@@ -57,16 +58,13 @@ class Board extends Component {
     // win when every cell is turned off
     let hasWon = board.every(row => row.every(cell => !cell));
     console.log(hasWon," is hasWOn");
-    this.setState({ board: board, hasWon: hasWon });
+    this.setState({ board: board, hasWon: hasWon ,flips:this.state.flips+1});
   }
 
 
   /** Render game board or winning message. */
 
-  render() {
-    if(this.state.hasWon){
-      return <h1>YOU WON!!</h1>
-    }
+  makeTable() {
     let tblBoard = [];
     for (let y = 0; y < this.props.nRows; y++) {
       let row = [];
@@ -82,11 +80,42 @@ class Board extends Component {
       }
       tblBoard.push(<tr key={y}>{row}</tr>);
     }
-    return(
-      <table className="Board">
+    return (
+      <table className='Board'>
         <tbody>{tblBoard}</tbody>
       </table>
-    )
+    );
+  }
+  render() {
+    return(
+      <div>
+        {this.state.hasWon ? (
+          <div className='winner'>
+            <span className='neon-orange'>YOU</span>
+            <span className='neon-blue'>WIN!</span>
+            <div>
+              <p className="neon-blue">Flips:  
+              <span className="neon-orange">{this.state.flips}</span>
+              </p>
+              </div>
+          </div>
+          
+        ) : (
+          <div>
+            <div className='Board-title'>
+              <div className='neon-orange'>Lights</div>
+              <div className='neon-blue'>Out</div>
+            </div>
+            {this.makeTable()}
+            <div>
+              <p className="neon-blue">Flips counter:
+              <span className="neon-orange">{this.state.flips}</span>
+              </p>
+              </div>
+          </div>
+        )}
+      </div>
+    );
   }
 }
 
