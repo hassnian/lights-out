@@ -16,7 +16,7 @@ class Board extends Component {
       board: this.createBoard(),
       flips: 0
     };
-    this.solve=this.solve.bind(this);
+    this.solve = this.solve.bind(this);
   }
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -115,7 +115,7 @@ class Board extends Component {
     );
   }
 
-  solve() {
+  async solve() {
     console.log("solving");
     let { nCols, nRows } = this.props;
     let board = this.state.board;
@@ -125,17 +125,75 @@ class Board extends Component {
         board[y][x] = !board[y][x];
       }
     }
-    for (let y = 0; y < this.props.nRows; y++) {
-      for (let x = 0; x < this.props.nCols; x++) {
-       if(board[y][x]&&y!=4){
-         let coord=`${y+1}-${x}`
-         this.flipCellsAround(coord)
-       }
-      }
+    function flipCellsAroundBoard(coord) {
+      let [y, x] = coord.split("-").map(Number);
+      flipCell(y, x);
+      flipCell(y, x + 1);
+      flipCell(y, x - 1);
+      flipCell(y + 1, x);
+      flipCell(y - 1, x);
     }
+    function cleanTop() {
+      //TODO::nrows, ncol
+      for (let y = 0; y < 5; y++) {
+        for (let x = 0; x < 5; x++) {
+          if (board[y][x] && y != 4) {
+            coord = `${y + 1}-${x}`;
+            flipCellsAroundBoard(coord);
+          }
+        }
+      }
+      return true;
+    }
+    function bottom() {
+      if (board[4][0]) {
+        console.log("Pressing d1 e1");
+        flipCellsAroundBoard(`${0}-${3}`);
+        flipCellsAroundBoard(`${0}-${4}`);
+        console.log(board);
+      }
+      if (board[4][1]) {
+        console.log("Pressing B1 and E1. ");
+        flipCellsAroundBoard(`${0}-${1}`);
+        flipCellsAroundBoard(`${0}-${4}`);
+        console.log(board);
+      }
+      if (board[4][2]) {
+        console.log("Pressing B1 and E1. ");
+        flipCellsAroundBoard(`${0}-${3}`);
+      }
+      cleanTop();
+    }
+    function allFalse() {
+      for (let y = 0; y < nRows; y++) {
+        for (let x = 0; x < nCols; x++) {
+          if (board[y][x]) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    let coord;
+    if (cleanTop()) {
+      bottom();
+    } 
+    if (allFalse()) {
+      this.setState({ hasWon: true });
+    }
+    console.log(allFalse());
+    
+    this.setState({ board });
+      if(!allFalse()){
+      alert('game impossible to win!')
+       this.setState({ board :  this.createBoard()});
+        return false
+      }
+      return true
   }
 
   render() {
+    
     return (
       <div>
         {this.state.hasWon ? (
