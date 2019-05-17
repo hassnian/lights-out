@@ -115,10 +115,10 @@ class Board extends Component {
     );
   }
 
-  async solve() {
+  async solve(board) {
     console.log("solving");
     let { nCols, nRows } = this.props;
-    let board = this.state.board;
+    // let board = this.state.board;
     function flipCell(y, x) {
       // if this coord is actually on board, flip it
       if (x >= 0 && x < nCols && y >= 0 && y < nRows) {
@@ -185,15 +185,18 @@ class Board extends Component {
     
     this.setState({ board });
       if(!allFalse()){
-      alert('game impossible to win!')
-       this.setState({ board :  this.createBoard()});
         return false
       }
       return true
   }
 
   render() {
-    
+    let board;
+do{
+      board=this.createBoard();
+      this.setState({board:board})
+    }
+    while(!this.solve(board))
     return (
       <div>
         {this.state.hasWon ? (
